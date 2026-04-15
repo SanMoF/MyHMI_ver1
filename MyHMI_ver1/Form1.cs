@@ -48,6 +48,17 @@ namespace MyHMI_ver1
                 }));
             }
         }
+        private void write2TextboxFromSubprocessV2(RichTextBox textBox, string text)
+        {
+            if (UIavilable)
+            {
+                Invoke(new MethodInvoker(() =>
+                {
+                    if (UIavilable) textBox.Text = text;
+                }));
+            }
+        }
+
         private void enableButtonFromSubprocess(Button button)
         {
             if (UIavilable)
@@ -76,7 +87,7 @@ namespace MyHMI_ver1
             try
             {
                 disableButtonFromSubprocess(button1);
-                client = new TcpClient("127.0.0.1", 502);
+                client = new TcpClient("10.48.185.48", 502);
                 if (client.Connected)
                 {
                     keepConnection = true;
@@ -124,10 +135,10 @@ namespace MyHMI_ver1
                                                 //buffer[16]
                                                 //buffer[17]--16--flow
                                                 //buffer[18]
-                                                write2TextboxFromSubprocess(richTextBox1, $"The flow is {buffer[17] * 256 + buffer[18]}");
+                                                write2TextboxFromSubprocessV2(richTextBox2, $"The flow is {buffer[17] * 256 + buffer[18]}");
 
                                                 float temperature = BitConverter.ToSingle(buffer, 9);
-                                                write2TextboxFromSubprocess(richTextBox1, $"The temperature is {temperature}");
+                                                write2TextboxFromSubprocessV2(richTextBox3, $"The temperature is {temperature}");
 
                                                 byte[] presureBuffer = new byte[4];
                                                 presureBuffer[0] = buffer[16];
@@ -135,7 +146,7 @@ namespace MyHMI_ver1
                                                 presureBuffer[2] = buffer[14];
                                                 presureBuffer[3] = buffer[13];
                                                 float pressure = BitConverter.ToSingle(presureBuffer, 0);
-                                                write2TextboxFromSubprocess(richTextBox1, $"The pressure is {pressure}");
+                                                write2TextboxFromSubprocessV2(richTextBox4, $"The pressure is {pressure}");
                                             }
                                         }
                                     }
